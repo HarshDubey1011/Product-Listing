@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    primary:
+      url: jdbc:postgresql://localhost:5434/shop?ApplicationName=app-primary
+      username: postgres
+      password: harsh
+    replica:
+      url: jdbc:postgresql://localhost:5433/shop?ApplicationName=app-replica
+      username: postgres
+      password: harsh
+  jpa:
+    hibernate:
+      ddl-auto: validate   # schema comes from init.sql, Hibernate only checks it
+    open-in-view: false
