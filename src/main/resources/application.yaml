@@ -1,4 +1,8 @@
 spring:
+  data:
+    redis:
+      port: 6379
+      host: localhost
   datasource:
     primary:
       url: jdbc:postgresql://localhost:5434/shop?ApplicationName=app-primary
