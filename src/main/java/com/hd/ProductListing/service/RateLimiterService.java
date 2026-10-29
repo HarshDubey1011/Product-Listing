@@ -28,7 +28,7 @@ public class RateLimiterService {
 
         String script = Files.readString(
                 new ClassPathResource(
-                        "scripts/fixed-window.lua"
+                        "scripts/sliding-window.lua"
                 ).getFile().toPath(),
                 StandardCharsets.UTF_8
         );
@@ -44,19 +44,22 @@ public class RateLimiterService {
 
         long windowId = epochSeconds / WINDOW_SECONDS;
 
-        long secondsIntoWindow = epochSeconds % WINDOW_SECONDS;
+        long elapsed = epochSeconds % WINDOW_SECONDS;
 
-        long ttl = WINDOW_SECONDS - secondsIntoWindow;
+        long ttl = (2 * WINDOW_SECONDS) - elapsed;
 
-        String key = "rate-limit:products:"
-                + clientIp
-                + ":"
-                + windowId;
+        String currentKey = "rate-limit:products:"
+                + clientIp + ":" + windowId;
+
+        String previousKey = "rate-limit:products:"
+                + clientIp + ":" + (windowId - 1);
 
         Long result = redisTemplate.execute(
                 fixedWindowScript,
-                List.of(key),
+                List.of(currentKey, previousKey),
                 String.valueOf(LIMIT),
+                String.valueOf(WINDOW_SECONDS),
+                String.valueOf(elapsed),
                 String.valueOf(ttl)
         );
 
