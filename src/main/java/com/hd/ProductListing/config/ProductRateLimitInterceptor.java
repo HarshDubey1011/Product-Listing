@@ -1,7 +1,7 @@
 
 package com.hd.ProductListing.config;
 
-import com.hd.ProductListing.service.RateLimiterService;
+import com.hd.ProductListing.service.LeakyBucketRateLimiterService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class ProductRateLimitInterceptor
         implements HandlerInterceptor {
 
-    private final RateLimiterService rateLimiterService;
+    private final LeakyBucketRateLimiterService rateLimiterService;
 
     @Override
     public boolean preHandle(
